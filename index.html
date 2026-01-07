@@ -19,47 +19,6 @@
       background-color: rgb(14, 156, 14);
     }
 
-    /* Card style */
-    .card {
-      margin: 60px auto 30px;
-      border-radius: 18px;
-      background: #1a1a1a;
-      /* dark card on black background */
-      max-width: 300px;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      transition: transform 0.3s;
-    }
-
-    /* Card hover effect */
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 12px 25px rgba(147, 51, 234, 0.5);
-    }
-
-    .card:hover img {
-      transform: scale(1.05);
-    }
-
-
-    .card {
-      margin-top: 60px;
-      border-radius: 18px;
-      background-color: rgb(36, 33, 52);
-      color: #f9fafb;
-    }
-
-    .card img {
-      height: 180px;
-      object-fit: cover;
-    }
 
     /* MODAL BACKDROP */
     .modal-backdrop.show {
@@ -160,24 +119,40 @@
       box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
     }
 
-    #imgModal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-
-      /* CENTER IMAGE */
-      display: none;
-      justify-content: center;
-      align-items: center;
-
-      z-index: 9999;
+    .card {
+      margin: 60px auto 30px;
+      border-radius: 18px;
+      background: #1a1a1a;
+      /* dark card on black background */
+      max-width: 300px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    #imgModal img {
-      max-width: 95%;
-      max-height: 95%;
-      object-fit: contain;
+    /* Card hover effect */
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 25px rgba(147, 51, 234, 0.5);
+    }
+
+    .card:hover img {
+      transform: scale(1.05);
+    }
+
+    .image-card {
+      width: 300px;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .image-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
   </style>
 </head>
@@ -242,23 +217,27 @@
 
   <!-- EXTRA IMAGE MODAL  -->
 
+  <img src="https://drive.google.com/thumbnail?id=FILE_ID&sz=w400" ondblclick="openFullImage('FILE_ID')"
+    title="Blog image preview" id="ImagePreview" />
+
   <div id="imgModal" ondblclick="this.style.display='none'"
-    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);justify-content:center;align-items:center">
+    style="display:none;position:fixed;inset:0;background:black;align-items:center;justify-content:center">
     <img id="fullImg" style="max-width:95%;max-height:95%">
   </div>
 
   <div id="footer"></div>
 
-
   <script>
     function openImage(fileId) {
-      document.getElementById("fullImg").src =
-        `https://drive.google.com/thumbnail?id=${fileId}&sz=w2000`;
-      document.getElementById("imgModal").style.display = "flex";
+      const imgModal = document.getElementById("imgModal");
+      const fullImg = document.getElementById("fullImg");
+      // console.log("Opening image with fileId:", fileId);
+      fullImg.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
+      imgModal.style.display = "flex";
     }
   </script>
 
-  <!-- SCRIPT -->
+
   <script>
 
     const BLOG_API = "https://script.google.com/macros/s/AKfycby7m3DE69iXYIymHXh_qOk2-4CfhG_y1xu2bjWmWq2BvwN0mtZOGCktU21sOOPzfDmS/exec";
@@ -317,12 +296,14 @@
         blogContainer.innerHTML += `
           <div class="col-md-3 mb-4">
             <div class="card h-100">
-              <img
-                src="https://drive.google.com/thumbnail?id=${fileId}&sz=w400"
-                ondblclick="openImage('${fileId}')"
-                alt="Blog Image"
-                id="fullImg"
-              />
+              <div class="image-card">
+                <img
+                  src="https://drive.google.com/thumbnail?id=${fileId}&sz=w400"
+                  alt="Preview"
+                  ondblclick="openImage('${fileId}')"
+                />
+                />
+               </div>
               <div class="card-body">
                   <h5>${blog.blogTitle}</h5>
                   <span class="badge bg-primary">${blog.blogType}</span>
