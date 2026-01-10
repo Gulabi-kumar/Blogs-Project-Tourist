@@ -144,18 +144,50 @@
   <script>
     const USER_API = "https://script.google.com/macros/s/AKfycbyVh7bPpgEeBHOBwxMIkn-eOctXvgryh0Aek4R9fbj6yFer-UfmHv50hySKdjLCaZls/exec";
 
+    
+
     function login(e) {
       e.preventDefault();
+
       const emailVal = document.getElementById("email").value;
       const passwordVal = document.getElementById("password").value;
-      fetch(USER_API + "?action=login&email=" + encodeURIComponent(emailVal) + "&password=" + encodeURIComponent(passwordVal))
+
+      fetch(
+        USER_API +
+        "?action=login&email=" +
+        encodeURIComponent(emailVal) +
+        "&password=" +
+        encodeURIComponent(passwordVal)
+      )
         .then(r => r.json())
         .then(d => {
           if (d.success) {
+
+            // 🔐 SECOND STEP: SECRET KEY
+            const secretKey = prompt("🔐 Enter Secret Key");
+
+            if (secretKey === null || secretKey.trim() === "") {
+              document.getElementById("msg").innerText =
+                "❌ Secret key required. Connect to admin.";
+              return;
+            }
+
+            // ✅ change this key as needed
+            const VALID_SECRET_KEY = "admin@cimage2011";
+
+            if (secretKey !== VALID_SECRET_KEY) {
+              document.getElementById("msg").innerText =
+                "❌ Invalid secret key. Connect to admin.";
+              return;
+            }
+
+            // ✅ LOGIN SUCCESS (unchanged)
             localStorage.setItem("user", JSON.stringify(d));
             location.href = "index.html";
+
           } else {
-            document.getElementById("msg").innerText = "❌ Invalid email or password";
+            document.getElementById("msg").innerText =
+              "❌ Invalid email or password";
           }
         });
     }
@@ -165,5 +197,6 @@
     }
   </script>
 </body>
+
 
 </html>
